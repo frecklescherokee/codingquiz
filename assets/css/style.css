@@ -95,3 +95,18 @@ header {
     justify-items: left;
     grid-gap: 10px;
 }
+
+.foot-message {
+    justify-items: left;
+    border-style: solid;
+    border-width: 3px 0 0 0;
+    border-color: gray;
+    margin: 20px;
+}
+
+.validation {
+    justify-items: left;
+    color: gray;
+    
+    margin: 20px;
+}

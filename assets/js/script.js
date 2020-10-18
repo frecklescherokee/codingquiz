@@ -9,11 +9,27 @@ var heroEl = document.querySelector("#hero-section");
 // make a DOM element for the question area
 var questionAreaEl = document.querySelector("#question-area");
 
+// make a DOM element for the footer
+var footEl = document.querySelector("#foot");
+
+// make a new Div to be a grid container for the question and answers
+var questionEl = document.createElement("div");
+
+// make a new Div to be a grid container for the footer message
+var footerMessageEl = document.createElement("div");
+
 
 //////////////// Quiz Question Logic //////////////////
 
+var quizQuestion = 0;
+
 // make an array to hold all questions and answers
 var questions = [];
+
+// make an array to hold all correct answers
+var answers = [1,1,1,1,1];
+
+var givenAnswer = 0;
 
 // load up the array with questions and answers
 // question 0
@@ -84,23 +100,69 @@ console.log(questions);
 
 
 
-var displayQuestions = function ()
+var displayQuestions = function (index)
 {
-    // Change the Hero to invisible
-    heroEl.remove();
-    // make a new Div to be a grid container for the question and answers
-    var questionEl = document.createElement("div");
-    // give it a class name of question-box
-    questionEl.className = "grid-container button-grid";
-    // add 4 buttons
-    questionEl.innerHTML = "<h1 class='center-column'>" + questions[0].question + "</h1><button class='answer-button' id='button-1'>" + questions[0].a1 + "</button><button class='answer-button' id='button-2'>" + questions[0].a2 + "</button><button class='answer-button' id='button-3'>" + questions[0].a3 + "</button><button class='answer-button' id='button-4'>" + questions[0].a4 + "</button>";
-    // add the question element to the question area element
-    questionAreaEl.appendChild(questionEl);
-    
+        // Change the Hero to invisible
+        heroEl.remove();
+        questionEl.remove();
+        
+        // give it a class name of question-box
+        questionEl.className = "grid-container button-grid";
+        // add 4 buttons
+        questionEl.innerHTML = "<h1 class='center-column'>" + questions[index].question + "</h1><button class='answer-button' id='button-1'>" + questions[index].a1 + "</button><button class='answer-button' id='button-2'>" + questions[index].a2 + "</button><button class='answer-button' id='button-3'>" + questions[index].a3 + "</button><button class='answer-button' id='button-4'>" + questions[index].a4 + "</button>";
+        // add the question element to the question area element
+        questionAreaEl.appendChild(questionEl);
 }
 
 
+var nextQuestion = function(event)
+{
+    // get target element from event
+    var targetEl = event.target;
 
+    // make the above for loop go through next loop
+    quizQuestion++;
+    if (quizQuestion < 5)
+    {
+        // display the next question
+        displayQuestions(quizQuestion);
+
+        // if answer was correct, show the "right!" message, otherwise Wrong!
+        // if button 1 was clicked was clicked
+        if (targetEl.matches("#button-1")) 
+        {
+            givenAnswer = 1;
+            console.log("button 1 was clicked")
+        } 
+        if (targetEl.matches("#button-2")) 
+        {
+            givenAnswer = 2;
+            console.log("button 2 was clicked")
+        } 
+        if (targetEl.matches("#button-3")) 
+        {
+            givenAnswer = 3;
+            console.log("button 3 was clicked")
+        } 
+        if (targetEl.matches("#button-4")) 
+        {
+            givenAnswer = 4;
+            console.log("button 4 was clicked")
+        } 
+        // make the footer give a right or wrong message
+        footerMessageEl.className = "foot-message grid-container";
+        footerMessageEl.innerHTML = "<h1 class='center-column validation'>Wrong!</h1>";
+        footEl.appendChild(footerMessageEl);
+    }
+    // else call up the final screen
+
+    
+}
+
+// var setAnswer = function(answer)
+// {
+//     console.log("you clicked the " + answer + " button.");
+// }
 
 
 
@@ -122,6 +184,7 @@ var clockWork = function()
     {
         display.textContent = "Time :0";
         ///////////// Call the function that changes the screen to the final screen showing points
+        clearInterval(startTimer);
     }
 }
 
@@ -137,10 +200,16 @@ var quizStartHandler = function ()
     startTimer();
     console.log("button clicked");
     // start the questions
-    displayQuestions();
+    displayQuestions(quizQuestion);
 }
+
+
 
 ///////////////// Event Listeners ///////////////////
 
 // add an event listener for the hero button that starts the timer and the quiz
 startButtonEl.addEventListener("click", quizStartHandler);
+
+// add an event listener for the answer buttons
+questionAreaEl.addEventListener("click", nextQuestion);
+
