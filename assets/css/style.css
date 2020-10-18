@@ -18,7 +18,6 @@ header {
     position: -webkit-sticky;
     position: sticky;
     top: 0;
-    background-image: url("../images/hero-bg.jpg");
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -30,8 +29,12 @@ header {
     color: blueviolet;
 }
 
-.hero h1{
+.heading {
     font-size: 35px;
+}
+
+.question-heading {
+    font-size: 22px;
 }
 
 .hero p {
@@ -43,11 +46,13 @@ header {
     background-color: blueviolet;
     padding: 5px 10px;
     font-size: 20px;
+    border-radius: 12px;
 }
 
 .grid-container {
     display: grid;
     grid-template-columns: 1fr 3fr 1fr;
+    grid-template-rows: auto;
     justify-items: center;
 
     text-align: center;
@@ -59,4 +64,34 @@ header {
 
 #hero-paragraph {
     padding: 20px 10px 20px 10px;
+}
+
+.answer-button {
+    grid-column: 2/3;
+    color:white;
+    background-color: blueviolet;
+    padding: 5px 10px;
+    font-size: 20px;
+    border-radius: 12px;
+}
+
+#button-1 {
+    grid-row: 2/3;
+}
+
+#button-2 {
+    grid-row: 3/4;
+}
+
+#button-3 {
+    grid-row: 4/5;
+}
+
+#button-4 {
+    grid-row: 5/6;
+}
+
+.button-grid {
+    justify-items: left;
+    grid-gap: 10px;
 }
