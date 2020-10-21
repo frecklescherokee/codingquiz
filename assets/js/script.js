@@ -9,6 +9,12 @@ var heroEl = document.querySelector("#hero-section");
 // make a DOM element for the question area
 var questionAreaEl = document.querySelector("#question-area");
 
+// make a DOM element for the question area
+var finalAreaEl = document.querySelector("#final-area");
+
+// make a DOM element for the final form
+var finalFormEl = document.querySelector("#give-initials");
+
 // make a DOM element for the footer
 var footEl = document.querySelector("#foot");
 
@@ -17,6 +23,25 @@ var questionEl = document.createElement("div");
 
 // make a new Div to be a grid container for the footer message
 var footerMessageEl = document.createElement("div");
+
+// make a new Div to be a grid container for the final screen message
+var finalEl = document.createElement("div");
+
+var timer = null;
+
+var initials = [];
+
+// make an array to store the high scores
+var highScores = [];
+
+
+/////////////////////////////////////////////////////////
+
+// set final screen to not show until it's time
+//finalFormEl.style.display === "none";
+
+
+
 
 
 //////////////// Quiz Question Logic //////////////////
@@ -27,9 +52,11 @@ var quizQuestion = 0;
 var questions = [];
 
 // make an array to hold all correct answers
-var answers = [1,1,1,1,1];
+var answers = [1,2,3,4,1];
 
 var givenAnswer = 0;
+
+var correctAnswers = 0;
 
 // load up the array with questions and answers
 // question 0
@@ -93,13 +120,6 @@ var questionObject4 =
 questions.push(questionObject4);
 console.log(questions);
 
-
-
-
-
-
-
-
 var displayQuestions = function (index)
 {
         // Change the Hero to invisible
@@ -114,7 +134,6 @@ var displayQuestions = function (index)
         questionAreaEl.appendChild(questionEl);
 }
 
-
 var nextQuestion = function(event)
 {
     // get target element from event
@@ -122,55 +141,95 @@ var nextQuestion = function(event)
 
     // make the above for loop go through next loop
     quizQuestion++;
-    if (quizQuestion < 5)
+    
+    if (targetEl.matches("#button-1")) 
     {
-        // display the next question
-        displayQuestions(quizQuestion);
+        givenAnswer = 1;
+        console.log("button 1 was clicked")
+    } 
+    else if (targetEl.matches("#button-2")) 
+    {
+        givenAnswer = 2;
+        console.log("button 2 was clicked")
+    } 
+    else if (targetEl.matches("#button-3")) 
+    {
+        givenAnswer = 3;
+        console.log("button 3 was clicked")
+    } 
+    else if (targetEl.matches("#button-4")) 
+    {
+        givenAnswer = 4;
+        console.log("button 4 was clicked")
+    } 
 
-        // if answer was correct, show the "right!" message, otherwise Wrong!
-        // if button 1 was clicked was clicked
-        if (targetEl.matches("#button-1")) 
-        {
-            givenAnswer = 1;
-            console.log("button 1 was clicked")
-        } 
-        if (targetEl.matches("#button-2")) 
-        {
-            givenAnswer = 2;
-            console.log("button 2 was clicked")
-        } 
-        if (targetEl.matches("#button-3")) 
-        {
-            givenAnswer = 3;
-            console.log("button 3 was clicked")
-        } 
-        if (targetEl.matches("#button-4")) 
-        {
-            givenAnswer = 4;
-            console.log("button 4 was clicked")
-        } 
-        // make the footer give a right or wrong message
+    // make the footer give a right or wrong message
+    if (givenAnswer === answers[quizQuestion - 1])
+    {
+        if(footerMessageEl) {footerMessageEl.remove()};
+        footerMessageEl.className = "foot-message grid-container";
+        footerMessageEl.innerHTML = "<h1 class='center-column validation'>Right!</h1>";
+        footEl.appendChild(footerMessageEl);
+        correctAnswers++;
+    }
+    else
+    {
+        if(footerMessageEl) {footerMessageEl.remove()};
         footerMessageEl.className = "foot-message grid-container";
         footerMessageEl.innerHTML = "<h1 class='center-column validation'>Wrong!</h1>";
         footEl.appendChild(footerMessageEl);
     }
-    // else call up the final screen
-
     
+    if (quizQuestion > 4 || secondsLeft < 0)
+    {
+        clearInterval(timer);
+        finalScreen();
+    }
+    else
+    {
+        // display the next question
+        displayQuestions(quizQuestion);
+    }
 }
 
-// var setAnswer = function(answer)
-// {
-//     console.log("you clicked the " + answer + " button.");
-// }
+//////////////////// Final Screen ////////////////////
+var finalScreen = function()
+{
+    
+    // collect initials from player
+    var currentInitials = prompt("All Done!  Your final score is " + correctAnswers + ".  Enter Initials:");
+    initials.push(currentInitials);
+    console.log(initials);
+    highScores.push(correctAnswers);
+    console.log(highScores);
 
+    // determine high score
+    var max = 0;
+    for (var i = 0; i < highScores.length; i++)
+    {
+        var now = highScores[i];
+        if (highScores[i] > highScores[max])
+        {
+            max = i;
+        }
+    }
 
+    // Display high score and ask user to go back or clear high scores
+    var x = function openWin()
+    {
+        var myBtn=document.getElementById("myBtn");
+        myBtn=window.open('','','width=200,height=300');
+        myBtn.document.write("<p>High Score</p>");
+        myBtn.document.write("<p>1. " + initials[max] + " - " + highScores[max] + "</p>");
+        myBtn.focus();
+    }
+    x();
 
-
-
+    location.reload();
+}
 
 //////////////////// Timer Logic //////////////////////
-var secondsLeft = 5;
+var secondsLeft = 75;
 
 // display time left once per second
 var clockWork = function()
@@ -184,16 +243,20 @@ var clockWork = function()
     {
         display.textContent = "Time :0";
         ///////////// Call the function that changes the screen to the final screen showing points
-        clearInterval(startTimer);
+        //clearInterval(startTimer);
+        clearInterval(timer);
+        finalScreen();
     }
 }
 
 // Update the clockwork function every 1 seconds
 var startTimer = function ()
 {
-    var timer = setInterval(clockWork, 1000); 
+    
+    timer = setInterval(clockWork, 1000); 
 }
 
+//debugger;
 var quizStartHandler = function ()
 {   
     // start the countdown
@@ -203,8 +266,6 @@ var quizStartHandler = function ()
     displayQuestions(quizQuestion);
 }
 
-
-
 ///////////////// Event Listeners ///////////////////
 
 // add an event listener for the hero button that starts the timer and the quiz
@@ -212,4 +273,3 @@ startButtonEl.addEventListener("click", quizStartHandler);
 
 // add an event listener for the answer buttons
 questionAreaEl.addEventListener("click", nextQuestion);
-

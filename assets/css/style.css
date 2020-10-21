@@ -58,6 +58,40 @@ header {
     text-align: center;
 }
 
+.final-grid-container {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    grid-template-rows: auto;
+    justify-items: left;
+
+    text-align: center;
+}
+
+.final-form {
+    /* display: none; */
+    grid-template-columns: auto auto auto;
+    grid-template-rows: auto;
+    justify-content: space-between;
+
+    text-align: center;
+    grid-column: 2/3;
+    grid-row: 3/4;
+}
+
+
+
+.final-form p {
+    grid-column: 1/2;
+}
+
+.final-form input {
+    grid-column: 2/3;
+}
+
+.final-form button {
+    grid-column: 3/4;
+}
+
 .center-column {
     grid-column: 2/3;
 }
