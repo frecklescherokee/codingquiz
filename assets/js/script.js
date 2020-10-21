@@ -235,7 +235,7 @@ var finalScreen = function()
     localStorage.setItem("highScores", JSON.stringify(highScores));
 
     location.reload();
-    myBtn.close();
+    
 }
 
 //////////////////// Timer Logic //////////////////////
@@ -281,12 +281,12 @@ var loadScores = function ()
     var scores = localStorage.getItem("highScores");
     scores = JSON.parse(scores)
     //console.log(scores);
-    highScores = scores;
+    if (scores) {highScores = scores;};
     console.log("high scores from local storage are " +highScores);
 
     var inits = localStorage.getItem("initials");
     inits = JSON.parse(inits);
-    initials = inits;
+    if (inits) {initials = inits;};
     console.log("initials from local storage are " + initials);
 }
 
