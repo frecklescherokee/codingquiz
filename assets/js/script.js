@@ -30,9 +30,12 @@ var finalEl = document.createElement("div");
 var timer = null;
 
 var initials = [];
+console.log("initials are:" + initials);
 
 // make an array to store the high scores
 var highScores = [];
+console.log("high scores are:" + initials);
+
 
 
 /////////////////////////////////////////////////////////
@@ -200,14 +203,15 @@ var finalScreen = function()
     var currentInitials = prompt("All Done!  Your final score is " + correctAnswers + ".  Enter Initials:");
     initials.push(currentInitials);
     console.log(initials);
+    
     highScores.push(correctAnswers);
     console.log(highScores);
+    
 
     // determine high score
     var max = 0;
     for (var i = 0; i < highScores.length; i++)
     {
-        var now = highScores[i];
         if (highScores[i] > highScores[max])
         {
             max = i;
@@ -219,13 +223,19 @@ var finalScreen = function()
     {
         var myBtn=document.getElementById("myBtn");
         myBtn=window.open('','','width=200,height=300');
+        myBtn.document.write("<p>Your Score</p>");
+        myBtn.document.write("<p>1. " + currentInitials + " - " + correctAnswers + "</p>");
         myBtn.document.write("<p>High Score</p>");
         myBtn.document.write("<p>1. " + initials[max] + " - " + highScores[max] + "</p>");
         myBtn.focus();
-    }
+    };
     x();
 
+    localStorage.setItem("initials", JSON.stringify(initials));
+    localStorage.setItem("highScores", JSON.stringify(highScores));
+
     location.reload();
+    myBtn.close();
 }
 
 //////////////////// Timer Logic //////////////////////
@@ -266,6 +276,20 @@ var quizStartHandler = function ()
     displayQuestions(quizQuestion);
 }
 
+var loadScores = function ()
+{
+    var scores = localStorage.getItem("highScores");
+    scores = JSON.parse(scores)
+    //console.log(scores);
+    highScores = scores;
+    console.log("high scores from local storage are " +highScores);
+
+    var inits = localStorage.getItem("initials");
+    inits = JSON.parse(inits);
+    initials = inits;
+    console.log("initials from local storage are " + initials);
+}
+
 ///////////////// Event Listeners ///////////////////
 
 // add an event listener for the hero button that starts the timer and the quiz
@@ -273,3 +297,5 @@ startButtonEl.addEventListener("click", quizStartHandler);
 
 // add an event listener for the answer buttons
 questionAreaEl.addEventListener("click", nextQuestion);
+
+loadScores();
